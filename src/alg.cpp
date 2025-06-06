@@ -33,6 +33,7 @@ int countPairs2(int* arr, int len, int value) {
 int search(int* arr, int left, int right, int value) {
   int first = -1;
   int l = left, r = right;
+  while (l <= r) {
     int m = l + (r - l) / 2;
     if (arr[m] >= value) {
       r = m - 1;
@@ -45,6 +46,7 @@ int search(int* arr, int left, int right, int value) {
   int last = first;
   l = first;
   r = right;
+  while (l <= r) {
     int m = l + (r - l) / 2;
     if (arr[m] <= value) {
       l = m + 1;
