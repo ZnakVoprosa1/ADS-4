@@ -12,54 +12,52 @@ int countPairs1(int *arr, int len, int value) {
   }
   return count;
 }
-int countPairs2(int *arr, int len, int value) {
-  int result = 0;
-  int left = 0, right = len - 1;
-  while (left < right) {
-    int sum = arr[left] + arr[right];
-    if (sum < value) {
-      int l = left, r = right;
-      int leftCount = 1;
-      int leftCount = 1;
-      while(l + 1 < r && arr[l + 1] == arr[left]) {++l; ++leftCount;}
-      while(r - 1 > l && arr[r - 1] == arr[right]) {--r; ++rightCount;}
-      if(arr[left] == arr[right]) {
-        int n = right - left + 1;
-        result += n * (n - 1) / 2;
-        break;
-      } else if (sum > value) {
-        result += leftCount * rightCount;
-        left = l + 1;
-        right = r - 1;
-      }
-    } else if(sum < value) {
-      ++left;
+  int count = 0;
+  int right = len - 1;
+  while (right > 0) {
+    if (arr[right] > value) {
+      right--;
     } else {
-      --right;
+      break;
+    }
+  }
+  for (int left = 0; left < len; left++) {
+    for (int r = right; r > left; r--) {
+      if (arr[left] + arr[r] == value)
+        count++;
     }
   }
   return count;
 }
+int search(int* arr, int left, int right, int value) {
+  int first = -1;
+  int l = left, r = right;
+    int m = l + (r - l) / 2;
+    if (arr[m] >= value) {
+      r = m - 1;
+      if (arr[m] == value) first = m;
+    } else {
+      l = m + 1;
+    }
+  }
+  if (first == -1) return 0;
+  int last = first;
+  l = first;
+  r = right;
+    int m = l + (r - l) / 2;
+    if (arr[m] <= value) {
+      l = m + 1;
+      if (arr[m] == value) last = m;
+    } else {
+      r = m - 1;
+    }
+  }
+  return last - first + 1;
+}
 int countPairs3(int *arr, int len, int value) {
   int count = 0;
-  for (int i = 0; i < len - 1; ++i) {
-    int target = value - arr[i];
-    int l = i + 1, r = len - 1;
-    while (l <= r) {
-      int m = l + (r - l) / 2;
-      if (arr[m] == target) {
-        int left_bound = m;
-        int right_bound = m;
-        left_bound--;
-        right_bound++;
-        count += (right_bound - left_bound + 1);
-        break;
-      } else if (arr[m] < target) {
-        l = m + 1;
-      } else {
-        r = m - 1;
-      }
-    }
+  for (int left = 0; left < len; ++left) {
+    count += search(arr, left + 1, len - 1, value - arr[left]);
   }
   return count;
 }
